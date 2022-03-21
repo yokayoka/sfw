@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Science of Forested Watershed</title>
+    <link rel="stylesheet" href="src/leaflet.css">
+    <!-- <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.3.0/dist/leaflet.css"
+    /> -->
+    <link rel="stylesheet" href="src/css/bootstrap.css" />
+    <link rel="stylesheet" href="src/plugins/L.Control.Pan.css" />
+
+    <!-- <link
+      rel="stylesheet"
+      href="src/plugins/leaflet-opencage/src/css/L.Control.OpenCageSearch.css"
+    /> -->
+    <script src="src/leaflet-src.js"></script>
+    <!-- <script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js"></script> -->
+
+    <script src="src/jquery-3.2.0.min.js"></script>
+    <script src="src/plugins/leaflet-providers.js"></script>
+    <script src="src/plugins/L.Control.Pan.js"></script>
+
+    <!-- <script src="src/plugins/leaflet-opencage/src/js/L.Control.OpenCageSearch.js"></script> -->
+    <script src="src/plugins/leaflet-providers.js"></script>
+    <style>
+      #mapdiv {
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+
+
+    <div id="mapdiv"></div>
+    <script>
+      var mymap;
+      var lyrGSI;
+      var lyrESRIImagery;
+      var lyrGoogleHybrid;
+      var lyrGSI60th;
+      var lyrGSI70th;
+      var ctlLayers;
+      var objBaseMaps;
+      var objOverlays;
+
+      $(document).ready(function () {
+        mymap = L.map("mapdiv", {
+          center: [36.50853809455054, 136.5966558789137],
+          zoom: 16,
+          attributionControl: false,
+        });
+        lyrGSI = L.tileLayer(
+          "https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png",
+          {
+            attribution:
+              "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>",
+          }
+        ).addTo(mymap);
+        lyrESRIImagery = L.tileLayer.provider("Esri.WorldImagery");
+        lyrGSI60th = L.tileLayer(
+          "https://cyberjapandata.gsi.go.jp/xyz/ort_old10/{z}/{x}/{y}.png",
+          {
+            attribution:
+              "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>",
+          }
+        );
+        lyrGSI70th = L.tileLayer(
+          "https://cyberjapandata.gsi.go.jp/xyz/gazo1/{z}/{x}/{y}.jpg",
+          {
+            attribution:
+              "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>地理院タイル</a>",
+            maxZoom: 18,
+            minZoom: 10,
+          }
+        );
+
+        var img_zoning_0 = 'data/zoning_0.png';
+        var img_bounds_zoning_0 = [[34.387887877245745,131.65620996966027],[38.2523646455757,142.58012696993538]];
+        var layer_zoning_0 = new L.imageOverlay(img_zoning_0,
+                                              img_bounds_zoning_0, {opacity: 0.5});
+ 
+        objBaseMaps = {
+          地理院地図: lyrGSI,
+          ESRI衛星画像: lyrESRIImagery,
+          国土地理院60年代写真: lyrGSI60th,
+          国土地理院70年代写真: lyrGSI70th,
+        };
+        objOverlays = {
+
+          温量指数: layer_zoning_0
+        };
+
+        ctlLayers = L.control.layers(objBaseMaps, objOverlays).addTo(mymap);
+        ctlPan = L.control.pan().addTo(mymap);
+
+      });
+
+    </script>
+  </body>
+</html>
